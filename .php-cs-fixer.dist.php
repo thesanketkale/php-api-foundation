@@ -29,4 +29,6 @@ return $config
     ])
     ->setFinder($finder)
     ->setRiskyAllowed(true)
-    ->setUsingCache(false);
+    ->setUsingCache(false)
+    ->setUnsupportedPhpVersionAllowed(true)
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::sequential());

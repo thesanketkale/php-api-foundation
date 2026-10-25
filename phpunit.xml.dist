@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Contract">
+            <directory>tests/Contract</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_DEBUG" value="true"/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+        <env name="JWT_SECRET" value="testing_jwt_secret_must_be_at_least_32_characters_long_for_security!"/>
+        <env name="JWT_ALGORITHM" value="HS256"/>
+        <env name="JWT_ISSUER" value="php-api-foundation-test"/>
+        <env name="JWT_ACCESS_TTL" value="900"/>
+        <env name="REFRESH_TOKEN_TTL" value="2592000"/>
+        <env name="RATE_LIMIT_DRIVER" value="file"/>
+        <env name="RATE_LIMIT_GLOBAL_LIMIT" value="1000"/>
+        <env name="RATE_LIMIT_AUTH_LIMIT" value="100"/>
+    </php>
+</phpunit>
