@@ -1,7 +1,7 @@
 # ==========================================
 # Stage 1: Build Dependencies via Composer
 # ==========================================
-FROM composer:2.9 AS builder
+FROM composer:2.10 AS builder
 
 WORKDIR /app
 
