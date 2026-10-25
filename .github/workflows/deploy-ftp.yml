@@ -1,0 +1,59 @@
+name: Deploy to Shared Hosting (FTP/SFTP)
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_env:
+        description: 'Target Deployment Environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+permissions: {}
+
+concurrency:
+  group: deploy-ftp-${{ inputs.target_env || 'production' }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-shared-hosting:
+    name: Deploy to ${{ inputs.target_env || 'production' }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.target_env || 'production' }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup PHP for Production Build
+        uses: shivammathur/setup-php@c54fbc61116e0b505bdf9c2386574854fb66fd84 # v2.32.0
+        with:
+          php-version: '8.3'
+          extensions: pdo, mbstring
+          coverage: none
+
+      - name: Install Production Dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader --no-progress --prefer-dist
+
+      - name: Install lftp & curl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp curl
+
+      - name: Run Deployment Script
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_PORT: ${{ secrets.FTP_PORT || '21' }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_REMOTE_ROOT: ${{ secrets.FTP_REMOTE_ROOT || '/public_html' }}
+          DEPLOY_APP_URL: ${{ secrets.DEPLOY_APP_URL }}
+          DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
+          DEPLOY_PROTOCOL: ${{ secrets.DEPLOY_PROTOCOL || 'ftp' }}
+        run: |
+          bash deploy/ftp/deploy.sh

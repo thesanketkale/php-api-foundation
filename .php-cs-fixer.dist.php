@@ -8,6 +8,7 @@ $dirs = array_values(array_filter([
     __DIR__ . '/config',
     __DIR__ . '/tests',
     __DIR__ . '/db',
+    __DIR__ . '/deploy',
 ], 'is_dir'));
 
 $finder = PhpCsFixer\Finder::create()

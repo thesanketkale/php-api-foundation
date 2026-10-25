@@ -1,0 +1,91 @@
+name: Deploy to AWS (ECS Fargate via OIDC)
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_env:
+        description: 'Target Environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+      aws_region:
+        description: 'AWS Region'
+        required: true
+        default: 'us-east-1'
+
+permissions: {}
+
+concurrency:
+  group: deploy-aws-${{ inputs.target_env || 'production' }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-aws:
+    name: Build, Push & Deploy to ECS Fargate
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.target_env || 'production' }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Configure AWS credentials via OpenID Connect (OIDC)
+        uses: aws-actions/configure-aws-credentials@e3ddf4a3c70b8192fe6eb617d98125677e316a79 # v4.0.2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: github-actions-ecs-deploy
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2.0.1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
+
+      - name: Build and push Docker image to Amazon ECR
+        uses: docker/build-push-action@4f58ea7960e238724364098723cb59ee117ca004 # v5.1.0
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPOSITORY || 'php-api-foundation' }}
+          IMAGE_TAG: ${{ github.sha }}
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: true
+          tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }},${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
+
+      - name: Trigger ECS Task Definition Update & Service Deployment
+        env:
+          ECS_CLUSTER: ${{ secrets.AWS_ECS_CLUSTER || 'php-api-cluster' }}
+          ECS_SERVICE: ${{ secrets.AWS_ECS_SERVICE || 'php-api-service' }}
+        run: |
+          echo "Updating ECS service ${ECS_SERVICE} in cluster ${ECS_CLUSTER}..."
+          aws ecs update-service \
+            --cluster "${ECS_CLUSTER}" \
+            --service "${ECS_SERVICE}" \
+            --force-new-deployment
+
+      - name: Wait for ECS Service Stability
+        env:
+          ECS_CLUSTER: ${{ secrets.AWS_ECS_CLUSTER || 'php-api-cluster' }}
+          ECS_SERVICE: ${{ secrets.AWS_ECS_SERVICE || 'php-api-service' }}
+        run: |
+          echo "Waiting for ECS service stability..."
+          aws ecs wait services-stable \
+            --cluster "${ECS_CLUSTER}" \
+            --service "${ECS_SERVICE}"
+
+      - name: Smoke Test Readiness Endpoint
+        if: env.APP_BASE_URL != ''
+        env:
+          APP_BASE_URL: ${{ secrets.APP_BASE_URL }}
+        run: |
+          echo "Testing ${APP_BASE_URL}/v1/health/ready..."
+          curl -f -s "${APP_BASE_URL}/v1/health/ready" || exit 1
+          echo "AWS ECS Deployment verified healthy!"

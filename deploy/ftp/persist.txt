@@ -1,0 +1,6 @@
+# Paths preserved across deployments
+# These files and directories must never be overwritten during atomic deployment swaps
+.env
+var/data
+var/logs
+public/uploads

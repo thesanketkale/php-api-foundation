@@ -32,7 +32,7 @@ fast_checks() {
       if [ -f "$f" ]; then
         php -l "$f" >/dev/null || bad=1
       fi
-    done < <(find src public config db tests -name '*.php' 2>/dev/null)
+    done < <(find src public config db tests deploy -name '*.php' 2>/dev/null)
     return $bad
   }
   have php && step "php -l (all source files)" php_syntax
