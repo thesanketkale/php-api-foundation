@@ -1,0 +1,41 @@
+name: Feature Request
+description: Suggest an idea or enhancement for php-api-foundation.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please keep in mind that `php-api-foundation` prioritizes minimal dependencies, high performance, and portability between shared hosting and cloud environments.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem?
+      description: A clear and concise description of the problem or limitation you are encountering.
+      placeholder: "I find it challenging when..."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution or Behavior
+      description: A clear description of the capability or architecture you'd like to see.
+      placeholder: "Provide a new support helper or middleware that..."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative libraries, designs, or workarounds you've evaluated.
+      placeholder: "We considered using package X, but..."
+    validations:
+      required: false
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Architecture & Constraints Alignment
+      options:
+        - label: The proposed change does NOT introduce heavyweight monolithic framework dependencies.
+          required: true
+        - label: The proposed change maintains compatibility with both shared hosting (PHP 8.3+) and container environments.
+          required: true
