@@ -1,0 +1,69 @@
+{
+  "name": "thesanketkale/php-api-foundation",
+  "description": "Dependency-light PHP 8.3 REST API foundation with JWT auth, PDO migrations, an OpenAPI contract, and deployment pipelines for FTP/SFTP shared hosting and for AWS or Azure through OIDC.",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sanket Kale",
+      "email": "contact@sanketkale.com",
+      "role": "Author"
+    }
+  ],
+  "keywords": [
+    "php",
+    "rest-api",
+    "openapi",
+    "jwt",
+    "pdo",
+    "mysql",
+    "shared-hosting",
+    "github-actions",
+    "oidc",
+    "docker"
+  ],
+  "require": {
+    "php": ">=8.2",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "nikic/fast-route": "^1.3",
+    "nyholm/psr7": "^1.8",
+    "nyholm/psr7-server": "^1.1",
+    "relay/relay": "^2.1",
+    "php-di/php-di": "^7.0",
+    "firebase/php-jwt": "^6.10",
+    "vlucas/phpdotenv": "^5.6",
+    "monolog/monolog": "^3.7",
+    "robmorgan/phinx": "^0.16.5",
+    "respect/validation": "^2.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.0",
+    "phpstan/phpstan": "^1.12",
+    "friendsofphp/php-cs-fixer": "^3.64",
+    "league/openapi-psr7-validator": "^0.22"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit --no-coverage",
+    "test:coverage": "vendor/bin/phpunit --coverage-text",
+    "phpstan": "vendor/bin/phpstan analyse --no-progress --memory-limit=1G",
+    "cs-check": "vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no",
+    "cs-fix": "vendor/bin/php-cs-fixer fix --using-cache=no",
+    "migrate": "vendor/bin/phinx migrate -c phinx.php",
+    "rollback": "vendor/bin/phinx rollback -c phinx.php"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {}
+  }
+}

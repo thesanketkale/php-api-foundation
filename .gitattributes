@@ -1,0 +1,47 @@
+# Auto-detect text files and normalize line endings to LF
+* text=auto eol=lf
+
+# Shell scripts must strictly use LF
+*.sh text eol=lf
+*.bash text eol=lf
+
+# PowerShell scripts on Windows
+*.ps1 text eol=crlf
+
+# PHP files
+*.php text eol=lf diff=php
+
+# Configuration & Documentation
+*.json text eol=lf
+*.neon text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.sql text eol=lf
+.editorconfig text eol=lf
+.env.example text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+
+# Export ignore for archive generation / composer dist
+/.github export-ignore
+/.githooks export-ignore
+/.pipeline export-ignore
+/tests export-ignore
+/docs export-ignore
+.editorconfig export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.php-cs-fixer.dist.php export-ignore
+.spectral.yaml export-ignore
+phpstan.neon export-ignore
+phpunit.xml.dist export-ignore

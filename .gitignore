@@ -1,0 +1,33 @@
+# Composer & Dependencies
+/vendor/
+composer.phar
+
+# Environment & Secrets
+.env
+.env.backup
+.env.local
+.env.*.local
+!.env.example
+
+# Runtime & Storage
+/storage/logs/*.log
+/storage/cache/*
+!/storage/logs/.gitkeep
+!/storage/cache/.gitkeep
+
+# Caches & Tooling State
+/.phpunit.cache/
+phpunit.result.cache
+.php-cs-fixer.cache
+/.phpstan.cache/
+
+# OS and Editor artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
