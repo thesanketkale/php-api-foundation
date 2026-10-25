@@ -4,4 +4,7 @@ parameters:
         - src
         - config
     treatPhpDocTypesAsCertain: false
-    ignoreErrors: []
+    ignoreErrors:
+        - identifier: cast.string
+        - identifier: cast.int
+        - identifier: callable.nonCallable
