@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
+$dirs = array_values(array_filter([
+    __DIR__ . '/src',
+    __DIR__ . '/public',
+    __DIR__ . '/config',
+    __DIR__ . '/tests',
+    __DIR__ . '/db',
+], 'is_dir'));
+
 $finder = PhpCsFixer\Finder::create()
-    ->in([
-        __DIR__ . '/src',
-        __DIR__ . '/public',
-        __DIR__ . '/config',
-        __DIR__ . '/tests',
-        __DIR__ . '/db',
-    ])
+    ->in($dirs)
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
@@ -26,4 +28,5 @@ return $config
         'trailing_comma_in_multiline' => true,
     ])
     ->setFinder($finder)
+    ->setRiskyAllowed(true)
     ->setUsingCache(false);
