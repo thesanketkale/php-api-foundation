@@ -32,7 +32,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Configure AWS credentials via OpenID Connect (OIDC)
         uses: aws-actions/configure-aws-credentials@e3ddf4a3c70b8192fe6eb617d98125677e316a79 # v4.0.2
