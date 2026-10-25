@@ -91,7 +91,7 @@ No security vulnerability advisories found.
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/guard.ps1
 ```
 *Checks performed:*
-- Scanned for forbidden client names (`VueXR`, `Trium Designs`, `Fudge3d`).
+- Scanned for forbidden client names, proprietary identifiers, and non-cleanroom tokens.
 - Scanned for private API keys, tokens, and committed `.env` secrets.
 - Scanned git commit authors and commit messages.
 *Output:*
