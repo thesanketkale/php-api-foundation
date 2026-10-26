@@ -50,6 +50,7 @@ return [
     'environments' => [
         'default_migration_table' => 'phinxlog',
         'default_environment' => 'development',
+        'default' => $connectionConfig,
         'development' => $connectionConfig,
         'testing' => [
             'adapter' => 'sqlite',
