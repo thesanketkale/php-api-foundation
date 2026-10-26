@@ -21,7 +21,8 @@ concurrency:
 jobs:
   deploy-shared-hosting:
     name: Deploy to ${{ inputs.target_env || 'production' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     environment: ${{ inputs.target_env || 'production' }}
     permissions:
       contents: read

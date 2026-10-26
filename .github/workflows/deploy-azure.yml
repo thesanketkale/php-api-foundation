@@ -21,7 +21,8 @@ concurrency:
 jobs:
   deploy-azure:
     name: Build, Push & Deploy to Azure App Service
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     environment: ${{ inputs.target_env || 'production' }}
     permissions:
       id-token: write

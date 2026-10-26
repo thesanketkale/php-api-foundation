@@ -25,7 +25,8 @@ concurrency:
 jobs:
   deploy-aws:
     name: Build, Push & Deploy to ECS Fargate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     environment: ${{ inputs.target_env || 'production' }}
     permissions:
       id-token: write

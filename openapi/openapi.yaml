@@ -9,9 +9,20 @@ info:
 servers:
   - url: http://localhost:8080/v1
     description: Local Development Server
+tags:
+  - name: Health
+    description: Service health and readiness probes
+  - name: Authentication
+    description: User registration, login, token refresh, and logout
+  - name: Users
+    description: Current user profile management
+  - name: Notes
+    description: Owner-scoped CRUD operations on notes with optimistic concurrency control
 paths:
   /health:
     get:
+      tags:
+        - Health
       summary: Liveness Probe
       description: Returns liveness status of the API service.
       operationId: getLiveness
@@ -32,6 +43,8 @@ paths:
 
   /health/ready:
     get:
+      tags:
+        - Health
       summary: Readiness Probe
       description: Verifies database connectivity and readiness to accept traffic.
       operationId: getReadiness
@@ -61,6 +74,8 @@ paths:
 
   /auth/register:
     post:
+      tags:
+        - Authentication
       summary: Register User
       description: Creates a new user account with an Argon2id-hashed password.
       operationId: registerUser
@@ -107,6 +122,8 @@ paths:
 
   /auth/login:
     post:
+      tags:
+        - Authentication
       summary: User Login
       description: Authenticates user credentials and issues a 15-minute JWT access token and rotating refresh token.
       operationId: loginUser
@@ -152,6 +169,8 @@ paths:
 
   /auth/refresh:
     post:
+      tags:
+        - Authentication
       summary: Refresh Access Token
       description: Rotates refresh token and issues a new access token. Revokes the entire token family if reuse is detected.
       operationId: refreshAuthToken
@@ -187,6 +206,8 @@ paths:
 
   /auth/logout:
     post:
+      tags:
+        - Authentication
       summary: User Logout
       description: Invalidates the current refresh token family.
       operationId: logoutUser
@@ -206,6 +227,8 @@ paths:
 
   /me:
     get:
+      tags:
+        - Users
       summary: Current User Profile
       description: Returns the authenticated user's profile details.
       operationId: getCurrentUser
@@ -232,6 +255,8 @@ paths:
 
   /notes:
     get:
+      tags:
+        - Notes
       summary: List Notes
       description: Returns a paginated collection of notes owned by the authenticated user.
       operationId: listNotes
@@ -293,6 +318,8 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
 
     post:
+      tags:
+        - Notes
       summary: Create Note
       description: Creates a new note resource for the authenticated user.
       operationId: createNote
@@ -350,6 +377,8 @@ paths:
 
   /notes/{id}:
     get:
+      tags:
+        - Notes
       summary: Get Note by ID
       description: Returns a single note owned by the authenticated user.
       operationId: getNote
@@ -392,6 +421,8 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
 
     put:
+      tags:
+        - Notes
       summary: Update Note
       description: Updates an existing note. Requires `If-Match` header containing current ETag for optimistic concurrency control.
       operationId: updateNote
@@ -466,6 +497,8 @@ paths:
                 $ref: '#/components/schemas/ValidationProblemDetails'
 
     delete:
+      tags:
+        - Notes
       summary: Delete Note
       description: Deletes an owned note resource.
       operationId: deleteNote
