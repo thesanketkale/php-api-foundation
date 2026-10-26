@@ -4,6 +4,8 @@
 # Shell scripts must strictly use LF
 *.sh text eol=lf
 *.bash text eol=lf
+scripts/verify.sh text eol=lf
+.githooks/* text eol=lf
 
 # PowerShell scripts on Windows
 *.ps1 text eol=crlf

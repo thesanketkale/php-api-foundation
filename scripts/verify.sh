@@ -38,11 +38,13 @@ fast_checks() {
   have php && step "php -l (all source files)" php_syntax
   have composer && [ -f "composer.json" ] && step "composer validate" composer validate --strict --no-check-all
   have vendor/bin/php-cs-fixer && step "php-cs-fixer" vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no
+  have vendor/bin/phpstan && step "phpstan analyse" vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+  have actionlint && [ -d ".github/workflows" ] && step "actionlint" actionlint .github/workflows/*.yml
+  have shellcheck && step "shellcheck (deploy & scripts)" bash -c 'find deploy scripts -name "*.sh" -exec shellcheck {} +'
 }
 
 # ---------------------------------------------------------------- FULL ----
 full_checks() {
-  have vendor/bin/phpstan && step "phpstan analyse" vendor/bin/phpstan analyse --no-progress --memory-limit=1G
   have vendor/bin/phpunit && step "phpunit test suite" vendor/bin/phpunit --no-coverage
   have composer && [ -f "composer.json" ] && step "composer audit" composer audit
 }
