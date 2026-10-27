@@ -266,7 +266,7 @@ curl -i -X POST http://localhost:8080/v1/auth/register \
       "token_type": "Bearer",
       "access_token": "eyJhbGciOi...",
       "expires_in": 900,
-      "refresh_token": "e674b94a2846f481075677..."
+      "refresh_token": "sample-refresh-token-value-here..."
     }
   }
 }
